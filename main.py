@@ -17,19 +17,58 @@ def generate_sequence(length=80):
     sequence = music_pb2.NoteSequence()
     sequence.tempos.add(qpm=110)
 
+    # --- Instruments ---
+    STRINGS = 48
+    BRASS = 56
+    BASS = 33
+
     current_pitch = random.choice(scale)
     time = 0.0
 
     for i in range(length):
-        # Build energy over time
+        # Energy progression
         if i < 20:
-            durations = [0.5, 1.0]      # slow intro
+            durations = [0.5, 1.0]
         elif i < 50:
-            durations = [0.25, 0.5]     # movement
+            durations = [0.25, 0.5]
         else:
-            durations = [0.25]          # fast climax
+            durations = [0.25]
 
         duration = random.choice(durations)
+
+        # 🎻 STRINGS (main melody)
+        note = sequence.notes.add()
+        note.pitch = current_pitch
+        note.start_time = time
+        note.end_time = time + duration
+        note.velocity = random.randint(70, 100)
+        note.instrument = 0
+        note.program = STRINGS
+
+        # 🎸 BASS (low support)
+        if i % 2 == 0:
+            bass = sequence.notes.add()
+            bass.pitch = current_pitch - 12
+            bass.start_time = time
+            bass.end_time = time + duration * 2
+            bass.velocity = 60
+            bass.instrument = 1
+            bass.program = BASS
+
+        # 🎺 BRASS (accent hits in climax)
+        if i > 50 and i % 4 == 0:
+            brass = sequence.notes.add()
+            brass.pitch = current_pitch + 12
+            brass.start_time = time
+            brass.end_time = time + duration
+            brass.velocity = 110
+            brass.instrument = 2
+            brass.program = BRASS
+
+        current_pitch = next_note(current_pitch)
+        time += duration
+
+    return sequence
 
         # --- Melody ---
         note = sequence.notes.add()
