@@ -71,7 +71,7 @@ def generate_sequence(length=80):
     return sequence
 
         # --- Melody ---
-        note = sequence.notes.add()
+        note = sequence.notes.add(78, 90)
         note.pitch = current_pitch
         note.start_time = time
         note.end_time = time + duration
