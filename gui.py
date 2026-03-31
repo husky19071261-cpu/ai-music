@@ -17,9 +17,9 @@ def run_generator():
             output = result.stdout + result.stderr
             output_text.delete("1.0", tk.END)
             output_text.insert(tk.END, output)
-            status_label.config(text="Done ✅")
+            status_label.config(text="Done")
         except Exception as e:
-            status_label.config(text="Error ❌")
+            status_label.config(text="Error")
             output_text.insert(tk.END, str(e))
 
     threading.Thread(target=task).start()
